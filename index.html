@@ -3,10 +3,11 @@
 <script src="lib\angular.min.js"></script>
 <script src="lib\angular-route.js"></script>
 <script src="controllers\controller.js"></script>
-<body>
+<body ng-app="memoApp" ng-controller="memoController">
 
-<div ng-app="memoApp" ng-controller="memoController">
- 	<h1 ng-click="heading = fun()">{{heading}}</h1>
+<h1 ng-click="heading = fun()">{{heading}}</h1>
+<a href="#add">test</a>
+<div ng-view>
 </div>
 
 </body>

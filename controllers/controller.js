@@ -4,4 +4,16 @@ app.controller('memoController', function($scope) {
     $scope.fun = function() {
         return "Memo Demo";
     };
+}).controller('addController', function($scope) {
+	alert('');
+    $scope.heading = "addController";
+    $scope.addMemo = function() {
+        alert('addMemo')
+    };
+})
+.controller('menuController', function($scope) {
+    $scope.heading = "menuController";
+    $scope.menuAction = function() {
+        alert('menuAction')
+    };
 });
