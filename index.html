@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="styles/bootstrap.css">
 
 </head>
-<div ng-app="app" ng-controller="NotesController">
+<div ng-init="init()" ng-app="app" ng-controller="NotesController">
     <form class="well">
         <label>Name</label>
         <input type="text" name="name" ng-model="newNote.name" />

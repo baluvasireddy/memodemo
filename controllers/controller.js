@@ -1,14 +1,26 @@
 var module = angular.module('app', []);
 
 module.service('NoteService', function () {
-    var uid = 1;
-    
-    var notesList = [{
-        id: 0,
-        'name': 'Viral',
-        'email': 'hello@gmail.com',
-        'phone': '123-2343-44'
-    }];
+    var uid;
+    var notesList;
+    this.init = function() {
+        notesList = [];
+        uid = 1;
+        if(localStorage.getItem("uid") == null){
+            localStorage.setItem("uid", uid);    
+        }
+        else {
+            uid = parseInt(localStorage.getItem("uid"));
+        }
+
+
+        if(localStorage.getItem("notesList") == null){
+            localStorage.setItem("notesList", notesList);    
+        }
+        else {
+            notesList = JSON.parse(localStorage.getItem("notesList"));
+        }
+    }
     
     this.save = function (note) {
         if (note.id == null) {
@@ -21,6 +33,7 @@ module.service('NoteService', function () {
                 }
             }
         }
+        this.updateDB();
 
     }
 
@@ -39,14 +52,26 @@ module.service('NoteService', function () {
                 notesList.splice(i, 1);
             }
         }
+        this.updateDB();
     }
 
     this.list = function () {
-        return notesList;
+       notesList = JSON.parse(localStorage.getItem("notesList"));
+       return notesList;
+    }
+
+    this.updateDB = function() {
+        localStorage.setItem("uid", uid);
+        localStorage.setItem("notesList", JSON.stringify(notesList));
+        notesList = JSON.parse(localStorage.getItem("notesList"));
+        uid = parseInt(localStorage.getItem("uid"));
     }
 });
 
 module.controller('NotesController', function ($scope, NoteService) {
+    $scope.init = function() {
+        NoteService.init();
+    }
 
     $scope.notesList = NoteService.list();
 
@@ -55,17 +80,20 @@ module.controller('NotesController', function ($scope, NoteService) {
         return
         NoteService.save($scope.newNote);
         $scope.newNote = {};
+        $scope.notesList = NoteService.list();
     }
 
 
     $scope.delete = function (id) {
-
-        NoteService.delete(id);
+        $scope.newNote = angular.copy(NoteService.get(id));
+        NoteService.delete($scope.newNote.id);
         if ($scope.newNote.id == id) $scope.newNote = {};
+        $scope.notesList = NoteService.list();
     }
 
 
     $scope.edit = function (id) {
         $scope.newNote = angular.copy(NoteService.get(id));
+        $scope.notesList = NoteService.list();
     }
 })
